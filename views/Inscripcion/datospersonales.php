@@ -31,13 +31,13 @@ use kartik\date\DatePicker;
     con una mayor facilidad --> 
         <label>Fecha de Nacimiento</label>
         <?= DatePicker::widget([
-            'name' => 'dp_2',
+            'name' => 'fechaNacPersona',
             'type' => DatePicker::TYPE_COMPONENT_PREPEND,
             'options' => ['placeholder' => 'Seleccione su fecha de nacimiento'],//Contenido que se mostrará dentro del input
             'language' => 'es',//definicion del lenguaje del widget
             'pluginOptions' => [
                 'autoclose'=>true,
-                'format' => 'dd-M-yyyy',//definicion del formato de fecha 
+                'format' => 'yyyy-mm-dd',//definicion del formato de fecha 
             ]
         ])?>
     </div>

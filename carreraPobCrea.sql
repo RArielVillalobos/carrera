@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-05-2019 a las 17:27:38
+-- Tiempo de generación: 17-05-2019 a las 14:55:18
 -- Versión del servidor: 10.1.32-MariaDB
 -- Versión de PHP: 7.2.5
 
@@ -23113,12 +23113,24 @@ INSERT INTO `localidad` (`idLocalidad`, `idProvincia`, `nombreLocalidad`, `codig
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `personadireccion`
+--
+
+CREATE TABLE `talleRemera` (
+  `idTalleRemera` int(1) NOT NULL,
+  `deshabilitado` BOOLEAN,
+  `talleRemera` varchar(4) DEFAULT NULL,
+  PRIMARY KEY (`idTalleRemera`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `persona`
 --
 
 CREATE TABLE `persona` (
   `idPersona` int(8) NOT NULL,
-  `talleRemera` varchar(4) DEFAULT NULL,
+  `idTalleRemera` int(1) NOT NULL,
   `dniCapitan` int(15) NOT NULL,
   `nombrePersona` varchar(64) DEFAULT NULL,
   `apellidoPersona` varchar(64) DEFAULT NULL,
@@ -23134,34 +23146,8 @@ CREATE TABLE `persona` (
   `idPersonaEmergencia` int(8) DEFAULT NULL,
   `idResultado` int(4) DEFAULT NULL,
   `idEncuesta` int(4) DEFAULT NULL,
+  `donador` BOOLEAN,
   `deshabilitado` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
---
--- Estructura de tabla para la tabla `propiedades`
---
-
-CREATE TABLE `parametros` (
-  `idParametros` int(8) NOT NULL AUTO_INCREMENT,
-  `cantidadCorredores` int(8),
-  PRIMARY KEY (`idParametros`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `validacion`
---
-
-CREATE TABLE `validacion` (
-  `idValidacion` int(8) NOT NULL AUTO_INCREMENT,
-  `idPersona` int(8) NOT NULL,
-  `mailPersonaValidado` tinyint(1) DEFAULT NULL,
-  `codigoValidacionMail` varchar(16) DEFAULT NULL,
-  `codigoRecuperarCuenta` varchar(16) DEFAULT NULL,
-  PRIMARY KEY (`idValidacion`),
-	FOREIGN KEY (`idPersona`) REFERENCES persona (`idPersona`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -23202,7 +23188,6 @@ CREATE TABLE `provincia` (
   `codigoIso31662` char(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 --
 -- Volcado de datos para la tabla `provincia`
 --
@@ -23232,6 +23217,7 @@ INSERT INTO `provincia` (`idProvincia`, `nombreProvincia`, `codigoIso31662`) VAL
 (22, 'Río Negro', 'AR-R'),
 (23, 'Santa Cruz', 'AR-Z'),
 (24, 'Tierra del Fuego', 'AR-V');
+
 -- --------------------------------------------------------
 
 --
@@ -23252,7 +23238,6 @@ CREATE TABLE `rol` (
   `idRol` int(8) NOT NULL,
   `descripcionRol` varchar(64) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 -- --------------------------------------------------------
 
@@ -23348,6 +23333,7 @@ ALTER TABLE `persona`
   ADD KEY `idPersonaDireccion` (`idPersonaDireccion`),
   ADD KEY `idFichaMedica` (`idFichaMedica`),
   ADD KEY `idEncuesta` (`idEncuesta`),
+  ADD KEY `idTalleRemera` (`idTalleRemera`),
   ADD KEY `idResultado` (`idResultado`);
 
 --
@@ -23382,7 +23368,6 @@ ALTER TABLE `resultado`
 ALTER TABLE `rol`
   ADD PRIMARY KEY (`idRol`);
 
-
 --
 -- Indices de la tabla `usuario`
 --
@@ -23399,7 +23384,8 @@ ALTER TABLE `vinculopersona`
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
-
+ALTER TABLE `talleRemera`
+  MODIFY `idTalleRemera` int(1) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `encuesta`
 --
@@ -23434,7 +23420,7 @@ ALTER TABLE `gruposanguineo`
 -- AUTO_INCREMENT de la tabla `localidad`
 --
 ALTER TABLE `localidad`
-  MODIFY `idLocalidad` int(8) NOT NULL AUTO_INCREMENT;
+  MODIFY `idLocalidad` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22964;
 
 --
 -- AUTO_INCREMENT de la tabla `persona`
@@ -23465,8 +23451,6 @@ ALTER TABLE `resultado`
 --
 ALTER TABLE `rol`
   MODIFY `idRol` int(8) NOT NULL AUTO_INCREMENT;
-
-
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
@@ -23518,7 +23502,8 @@ ALTER TABLE `persona`
   ADD CONSTRAINT `persona_ibfk_3` FOREIGN KEY (`idPersonaDireccion`) REFERENCES `personadireccion` (`idPersonaDireccion`),
   ADD CONSTRAINT `persona_ibfk_4` FOREIGN KEY (`idFichaMedica`) REFERENCES `fichamedica` (`idFichaMedica`),
   ADD CONSTRAINT `persona_ibfk_6` FOREIGN KEY (`idEncuesta`) REFERENCES `encuesta` (`idEncuesta`),
-  ADD CONSTRAINT `persona_ibfk_7` FOREIGN KEY (`idResultado`) REFERENCES `resultado` (`idResultado`);
+  ADD CONSTRAINT `persona_ibfk_7` FOREIGN KEY (`idResultado`) REFERENCES `resultado` (`idResultado`),
+  ADD CONSTRAINT `persona_ibfk_8` FOREIGN KEY (`idTalleRemera`) REFERENCES `talleremera` (`idTalleRemera`);
 
 --
 -- Filtros para la tabla `personadireccion`
