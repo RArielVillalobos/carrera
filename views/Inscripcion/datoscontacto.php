@@ -45,17 +45,16 @@ use yii\helpers\Url;
                         'placeholder' => 'Seleccione una localidad...',
                         'depends'=>['idProvincia'],
                         'url'=>Url::to(['localidad/localidades']),
-                        'loadingText' => 'Cargando localidades...']
+                        'loadingText' => 'Cargando clientes...']
             ])->label('Localidad');
             ?>
         </div>
     </div>
     
-    <div class="row">
-        <div id="direccionUsuario">
-            <?= $form->field($personaDireccion, 'direccionUsuario')->textInput(['maxlength' => true])->label('Direccion') ?>
-        </div>
+    <div id="direccionUsuario">
+        <?= $form->field($personaDireccion, 'direccionUsuario')->textInput(['maxlength' => true])->label('Direccion') ?>
     </div>
+
 </div>
 
     <div class="form-group">

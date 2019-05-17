@@ -23118,16 +23118,17 @@ INSERT INTO `localidad` (`idLocalidad`, `idProvincia`, `nombreLocalidad`, `codig
 
 CREATE TABLE `persona` (
   `idPersona` int(8) NOT NULL,
-  `talleRemera` varchar(4) DEFAULT NULL,
-  `dniCapitan` int(15) NOT NULL,
   `nombrePersona` varchar(64) DEFAULT NULL,
   `apellidoPersona` varchar(64) DEFAULT NULL,
   `fechaNacPersona` date DEFAULT NULL,
-  `sexoPersona` int(1) DEFAULT NULL,
+  `idSexoPersona` int(1) DEFAULT NULL,
   `nacionalidadPersona` varchar(64) DEFAULT NULL,
   `telefonoPersona` varchar(32) DEFAULT NULL,
   `mailPersona` varchar(64) NOT NULL,
   `idUsuario` int(8) NOT NULL,
+  `mailPersonaValidado` tinyint(1) DEFAULT NULL,
+  `codigoValidacionMail` varchar(16) DEFAULT NULL,
+  `codigoRecuperarCuenta` varchar(16) DEFAULT NULL,
   `idPersonaDireccion` int(8) DEFAULT NULL,
   `idFichaMedica` int(8) DEFAULT NULL,
   `fechaInscPersona` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -23135,33 +23136,6 @@ CREATE TABLE `persona` (
   `idResultado` int(4) DEFAULT NULL,
   `idEncuesta` int(4) DEFAULT NULL,
   `deshabilitado` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
---
--- Estructura de tabla para la tabla `propiedades`
---
-
-CREATE TABLE `parametros` (
-  `idParametros` int(8) NOT NULL AUTO_INCREMENT,
-  `cantidadCorredores` int(8),
-  PRIMARY KEY (`idParametros`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `validacion`
---
-
-CREATE TABLE `validacion` (
-  `idValidacion` int(8) NOT NULL AUTO_INCREMENT,
-  `idPersona` int(8) NOT NULL,
-  `mailPersonaValidado` tinyint(1) DEFAULT NULL,
-  `codigoValidacionMail` varchar(16) DEFAULT NULL,
-  `codigoRecuperarCuenta` varchar(16) DEFAULT NULL,
-  PRIMARY KEY (`idValidacion`),
-	FOREIGN KEY (`idPersona`) REFERENCES persona (`idPersona`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -23253,6 +23227,25 @@ CREATE TABLE `rol` (
   `descripcionRol` varchar(64) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sexo`
+--
+
+CREATE TABLE `sexo` (
+  `idSexo` int(1) NOT NULL,
+  `descripcionSexo` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `sexo`
+--
+
+INSERT INTO `sexo` (`idSexo`, `descripcionSexo`) VALUES
+(1, 'Femenino'),
+(2, 'Masculino'),
+(3, 'Otro');
 
 -- --------------------------------------------------------
 
@@ -23262,8 +23255,8 @@ CREATE TABLE `rol` (
 
 CREATE TABLE `usuario` (
   `idUsuario` int(8) NOT NULL,
-  `dniUsuario` int(15) NOT NULL,
-  `claveUsuario` varchar(100) NOT NULL,
+  `cuilUsuario` int(15) NOT NULL,
+  `claveUsuario` varchar(32) NOT NULL,
   `idRol` int(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -23347,6 +23340,7 @@ ALTER TABLE `persona`
   ADD KEY `idPersonaEmergencia` (`idPersonaEmergencia`),
   ADD KEY `idPersonaDireccion` (`idPersonaDireccion`),
   ADD KEY `idFichaMedica` (`idFichaMedica`),
+  ADD KEY `idSexoPersona` (`idSexoPersona`),
   ADD KEY `idEncuesta` (`idEncuesta`),
   ADD KEY `idResultado` (`idResultado`);
 
@@ -23382,6 +23376,11 @@ ALTER TABLE `resultado`
 ALTER TABLE `rol`
   ADD PRIMARY KEY (`idRol`);
 
+--
+-- Indices de la tabla `sexo`
+--
+ALTER TABLE `sexo`
+  ADD PRIMARY KEY (`idSexo`);
 
 --
 -- Indices de la tabla `usuario`
@@ -23466,7 +23465,11 @@ ALTER TABLE `resultado`
 ALTER TABLE `rol`
   MODIFY `idRol` int(8) NOT NULL AUTO_INCREMENT;
 
-
+--
+-- AUTO_INCREMENT de la tabla `sexo`
+--
+ALTER TABLE `sexo`
+  MODIFY `idSexo` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
@@ -23517,6 +23520,7 @@ ALTER TABLE `persona`
   ADD CONSTRAINT `persona_ibfk_2` FOREIGN KEY (`idPersonaEmergencia`) REFERENCES `personaemergencia` (`idPersonaEmergencia`),
   ADD CONSTRAINT `persona_ibfk_3` FOREIGN KEY (`idPersonaDireccion`) REFERENCES `personadireccion` (`idPersonaDireccion`),
   ADD CONSTRAINT `persona_ibfk_4` FOREIGN KEY (`idFichaMedica`) REFERENCES `fichamedica` (`idFichaMedica`),
+  ADD CONSTRAINT `persona_ibfk_5` FOREIGN KEY (`idSexoPersona`) REFERENCES `sexo` (`idSexo`),
   ADD CONSTRAINT `persona_ibfk_6` FOREIGN KEY (`idEncuesta`) REFERENCES `encuesta` (`idEncuesta`),
   ADD CONSTRAINT `persona_ibfk_7` FOREIGN KEY (`idResultado`) REFERENCES `resultado` (`idResultado`);
 
